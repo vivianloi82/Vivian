@@ -1,39 +1,85 @@
 //This is an example code for Bottom Navigation//
 import React from 'react';
 //import react in our code.
-import {  View} from 'react-native';
+import {  View, FlatList,StyleSheet} from 'react-native';
 //import all the basic component we have used
 import Table, {Section,  StaticCell, BioCell, TouchableCell} from 'react-native-js-tableview';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Fire from "../Fire";
 
 export default class NotificationScreen extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = ({
+        Notifications: [],
+       
+        title: '',
+        subtitle:''
+    });
+    this.ref = Fire.shared.firestore.collection("Notifications");
+}
+
+
+
+componentDidMount() {
+    this.unsubscribe = this.ref.onSnapshot((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => {
+            //    console.log(doc.data().category);
+            //    console.log(doc.data().points);
+            //    console.log(doc.data().title);
+            data.push({
+               
+                title: doc.data().title,
+                subtitle:  doc.data().subtitle,
+            });
+            this.setState({
+              Notifications: data,
+
+            })
+         //   console.log(this.state.BrowseRewards);
+        });
+
+
+    });
+  
+}
 
 
   render() {
     return (
-      <View style={{ flex: 1,  }}>
-  <Table  scrollable={true}> 
+      <View style={{ flex: 1}}>
+  <Table style={{backgroundColor:'white',height:640}}  scrollable={true} > 
            
           
-           <Section > 
+         
+           <FlatList
+                    data={this.state.Notifications}
+                    renderItem={({ item }) => {
+                        return (
 
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Christmas Discount" subtitle="Discounts are during 15 Dec to 30 Dec at selected stores." accessory="disclosure" onPress={() => {this.props.navigation.navigate("ViewProfile")}} />
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Big Sales for Rewards" subtitle="During 15 Nov 2019 to 20 Nov 2019 at Rewards." accessory="disclosure" onPress={() => {this.props.navigation.navigate("EditSelf")}} />
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Application updated" subtitle="New features to bring convenient to you!" accessory="disclosure" onPress={() =>  {this.props.navigation.navigate("ViewQR")}} />
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Get 20% for Reservation, T&C applied" subtitle="New users will get 20% if reserve more than 2 hours." accessory="disclosure" onPress={() => {this.props.navigation.navigate("RewardsNavi")}} />
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Get RM 5 Rebate!!"  subtitle="Users will getRM 5 Rebateif reserve more than 3 hours on weekends" accessory="disclosure" onPress={() => {}} />
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Rate us your experience" subtitle="We would like to get reviews from you to improve the application."  accessory="disclosure" onPress={() => {this.props.navigation.navigate("Notify")}} />
-               <StaticCell iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title="Message from Smart Car Parking" subtitle="You can now reserve for available parking slots!" accessory="disclosure" onPress={() => {this.props.navigation.navigate("Settings")}} />
+                            <View>
+
+<StaticCell style={styles.borderbottom} iconComponent={   <MaterialIcon name="notifications-none" size={25} />} title={item.title} subtitle={item.subtitle} accessory="disclosure"  />
+            
+                            </View>
+
+                        )
+
+                    }}
+                    keyExtractor={(item)=>item.title}
+
+
+                />
+
 
                
-           </Section>
+         
            
 
 
-            <Section>
-
-             
-           </Section> 
+         
 
        </Table>     
        
@@ -41,3 +87,11 @@ export default class NotificationScreen extends React.Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  borderbottom:{
+      borderBottomColor:"#d3d3d3",
+      borderBottomWidth:0.5,
+      backgroundColor:'white'
+
+  }
+});

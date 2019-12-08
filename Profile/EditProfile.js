@@ -143,6 +143,8 @@ export default class EditProfileScreen extends React.Component {
 
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Text style={styles.Field}>Gender</Text>
+          <View style={styles.androidPicker}>
+           
           <Picker
            
             enabled={this.state.genderDisable}
@@ -167,7 +169,7 @@ export default class EditProfileScreen extends React.Component {
             placeholderStyle={{ color: "black", }}
             placeholderIconColor="blue"
             selectedValue={this.state.selected}
-            style={styles.picker}
+            style={styles.iosPicker}
             onValueChange={this.onValueChange.bind(this)}
 
           >
@@ -175,6 +177,7 @@ export default class EditProfileScreen extends React.Component {
             <Picker.Item label="Female" value="Female" />
 
           </Picker>
+          </View>
         </View>
         <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
 
@@ -243,4 +246,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white'
   },
+  iosPicker:
+{
+  width: Platform.select({ ios: 200 }),
+  marginLeft:Platform.select({ ios: 20 }),
+  borderWidth: Platform.select({ ios: 1 }),
+  borderRadius: Platform.select({ ios: 5 }),
+  borderColor: Platform.select({ ios: 'grey' }),
+  marginTop: Platform.select({ ios: 15 }),
+
+},
+androidPicker: {
+  width: Platform.select({ android: 150 }),
+  marginLeft:Platform.select({ android: 20 }),
+  borderWidth: Platform.select({ android: 1 }),
+  borderRadius: Platform.select({ android: 5 }),
+  borderColor: Platform.select({ android: 'grey' }),
+},
 });
