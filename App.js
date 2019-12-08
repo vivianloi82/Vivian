@@ -22,7 +22,12 @@ import PersonalDetailsScreen from "./screens/PersonalDetails";
  import ReserveScreen from './pages/Reserve';
  import FindMyCarScreen from './pages/FindMyCar';
  import ReportScreen from './pages/Report';
- 
+//Profile
+import EditProfileScreen from './Profile/EditProfile';
+import SettingsScreen from './Profile/Settings';
+import NotificationScreen from './Profile/Notification';
+import RewardsScreen from './Profile/Rewards';
+
 const HomeStack = createStackNavigator(
   {
     //Defination of Navigaton from home screen
@@ -90,7 +95,26 @@ const ProfileStack = createStackNavigator(
   {
     //Defination of Navigaton from profile screen
     Profile: { screen: ProfileScreen },
-   
+    EditProfile: { screen: EditProfileScreen,
+      navigationOptions: () => ({
+        title: 'Edit Profile',
+      
+}), },
+Settings: { screen: SettingsScreen,
+  navigationOptions: () => ({
+    title: 'Settings',
+  
+}), },
+Notification: { screen: NotificationScreen,
+  navigationOptions: () => ({
+    title: 'Notification',
+  
+}), },
+Rewards: { screen: RewardsScreen,
+  navigationOptions: () => ({
+    title: 'Rewards',
+  
+}), },
   },
   {
     defaultNavigationOptions: {

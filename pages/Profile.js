@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Table, {Section,  StaticCell, BioCell, TouchableCell} from 'react-native-js-tableview';
 import Fire from "../Fire";
 
 export default class ProfileScreen extends React.Component {
@@ -27,66 +28,68 @@ export default class ProfileScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{ marginTop: 64, alignItems: "center" }}>
-                   
-                    <Text style={styles.name}>{this.state.user.name}</Text>
-                </View>
-                <View style={styles.statsContainer}>
-                  
-                </View>
+                  <Table style={{backgroundColor:'white',height:2000}} scrollable={true}> 
+           
+          
+        
+          
+               <BioCell  title={this.state.user.name} subtitle={this.state.user.points + " point(s)"} />
+               <StaticCell style={styles.row} title="My QR Code" accessory="disclosure" onPress={() =>  {this.props.navigation.navigate("ViewQR")}} />
+               <StaticCell style={styles.row} title="Edit Profile" accessory="disclosure" onPress={() => {this.props.navigation.navigate("EditProfile")}} />
+               <StaticCell style={styles.row} title="Rewards" accessory="disclosure" onPress={() => {this.props.navigation.navigate("Rewards")}} />
+               <StaticCell style={styles.row} title="History" accessory="disclosure" onPress={() => {}} />
+               <StaticCell style={styles.row} title="Notification" accessory="disclosure" onPress={() => {this.props.navigation.navigate("Notification")}} />
+               <StaticCell style={styles.row} title="Settings" accessory="disclosure" onPress={() => {this.props.navigation.navigate("Settings")}} />
 
-                <Button
-                    onPress={() => {
-                        Fire.shared.signOut();
-                    }}
-                    title="Log out"
-                />
+               
+            </Table>  
+
+
+    {/*    Log out button    */}
+
+  <TouchableOpacity style={styles.button}  onPress={() => { Fire.shared.signOut();}} >
+
+<Text style={styles.buttonText}>Log out</Text>
+</TouchableOpacity>     
+         
+
+          
+
+      
+             
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    row:{
+        borderBottomWidth:0.5,
+        borderBottomColor:'#d3d3d3',
+        marginHorizontal:10
+    },
     container: {
-        flex: 1
+        flex: 1,
+       
+
     },
-    profile: {
-        marginTop: 64,
-        alignItems: "center"
-    },
-    avatarContainer: {
-        shadowColor: "#151734",
-        shadowRadius: 30,
-        shadowOpacity: 0.4
-    },
-    avatar: {
-        width: 136,
-        height: 136,
-        borderRadius: 68
-    },
-    name: {
-        marginTop: 24,
-        fontSize: 16,
-        fontWeight: "600"
-    },
-    statsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        margin: 32
-    },
-    stat: {
+    button: {
+        marginHorizontal: 9,
+        marginVertical: 10,
+        backgroundColor: "#89CFF0",
+        borderRadius: 8,
+        height: 52,
         alignItems: "center",
-        flex: 1
-    },
-    statAmount: {
-        color: "#4F566D",
-        fontSize: 18,
-        fontWeight: "300"
-    },
-    statTitle: {
-        color: "#C3C5CD",
-        fontSize: 12,
-        fontWeight: "500",
-        marginTop: 4
-    }
+        justifyContent: "center",
+        borderColor:"#38AEE6",
+        borderWidth:2,
+       
+        bottom:0
+    
+      },
+      buttonText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'black'
+      },
 });

@@ -18,6 +18,33 @@ class Fire {
         firebase.initializeApp(firebaseConfig);
     }
 
+
+    addReserve = async ({ chosenDate, chosenTime, value,floor ,section,parkingslot,name }) => {
+
+        return new Promise((res, rej) => {
+            this.firestore
+                .collection("Reservation-UserInput")
+                .add({ 
+                    
+                    chosenDate,
+                    chosenTime,
+                    value,
+                    floor,
+                    section,
+                    parkingslot,
+                    name,
+                    uid: this.uid,
+                })
+                .then(ref => {
+                    res(ref);
+                })
+                .catch(error => {
+                    rej(error);
+                });
+        });
+    };
+
+
     addPost = async ({value, text, localUri }) => {
         const remoteUri = await this.uploadPhotoAsync(localUri, `Report_Photos/${this.uid}/${Date.now()}`);
 
@@ -101,6 +128,11 @@ class Fire {
 
     get timestamp() {
         return Date.now();
+    }
+
+    get auth()
+    {
+        return (firebase.auth);
     }
 }
 

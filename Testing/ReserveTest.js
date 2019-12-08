@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView, TouchableOpacity, StyleSheet, Image
 } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import { Container, Header, Title, Button, Icon, Right, Body, Left, Picker, Form } from "native-base";
 import Fire from "../Fire";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -14,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 //import * as ImagePicker from "expo-image-picker";
 //import all the basic component we have used
 
+import ImageActionSheet from '../packages/ImageActionSheet'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment'
 
@@ -35,6 +37,7 @@ export default class Reserve extends React.Component {
       section:"",
       parkingslot:"",
 
+      errormsg:""
     };
   }
 
@@ -63,9 +66,9 @@ export default class Reserve extends React.Component {
 
   handlePost = () => {
     Fire.shared
-      .addReserve({ chosenDate: this.state.chosenDate, chosenTime: this.state.chosenTime, value: this.state.selected,floor: this.state.floor,section: this.state.section, parkingslot: this.state.parkingslot, name:this.state.user.name})
+      .addReserve({ chosenDate: this.state.chosenDate, chosenTime: this.state.chosenTime, value: this.state.selected })
       .then(ref => {
-        this.setState({ chosenDate: "", chosenTime: "", parkingslot: "" });
+        this.setState({ chosenDate: "", chosenTime: "" });
         this.props.navigation.goBack();
       })
       .catch(error => {
@@ -114,9 +117,10 @@ export default class Reserve extends React.Component {
 
   handleSearch =()=>
   {
-   
-   
-      Fire.shared.firestore.collection("CategoryParkingSlot").doc(this.state.selected).collection("ParkingSlots").where("Status",  "==", "Available")
+    // Disabilities
+    if(this.state.selected == 'Disabilities')
+    {
+      Fire.shared.firestore.collection("CategoryParkingSlot").doc("Disabilities").collection("ParkingSlots").where("Status",  "==", "Available")
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
@@ -127,15 +131,62 @@ export default class Reserve extends React.Component {
               })
         });
      
-       
+        // if (!doc.exists) {
+        //   console.log('No such document!');
+        // } else {
+        //   console.log('Document data:', doc.data().Status);
+        //   if (doc.data().Status == 'Available')
+        //   {
+        //   this.setState({
+        //     floor: doc.data().Floor,
+        //     section: doc.data().Section,
+        //     parkingslot: doc.data().SlotName
+        //   })
+        // }
+        // else
+        // {
+        //   console.log('No such document!');
+
+        // }
+        
+        // }
       })
       .catch(err => {
         console.log('Error getting document', err);
-       
+        this.setState({
+          errormsg:"No available parking slot",
+          
+        })
       });
     }
-  
-  
+    // Normal
+    else if(this.state.selected == 'Normal')
+    {
+      Fire.shared.firestore.collection("CategoryParkingSlot").doc("Normal").collection("ParkingSlots").doc("PS00001").get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log('No such document!');
+        } else {
+          console.log('Document data:', doc.data());
+          this.setState({
+            floor: doc.data().Floor,
+            section: doc.data().Section,
+            parkingslot: doc.data().SlotName
+          })
+
+        }
+      })
+      .catch(err => {
+        console.log('Error getting document', err);
+      });
+    }
+
+    else
+    {
+      console.log('Error getting document');
+
+    }
+  }
   render() {
     return (
       <SafeAreaView style={styles.safeContainer}>
@@ -231,7 +282,7 @@ export default class Reserve extends React.Component {
                     headerStyle={{ backgroundColor: "#b95dd3" }}
                     headerBackButtonTextStyle={{ color: "#fff" }}
                     headerTitleStyle={{ color: "#fff" }}
-                    placeholder="Choose category"
+                    placeholder="Choose one category"
                     placeholderStyle={{ color: "black", }}
                     placeholderIconColor="blue"
                     selectedValue={this.state.selected}
@@ -256,25 +307,21 @@ export default class Reserve extends React.Component {
 
             {/* Retrieve data from CategoryParkingSlot */}
             <View style={{marginHorizontal:10, marginTop:10}}>
-              <Text style={{fontSize:20,fontStyle:'italic',fontWeight:'bold',borderBottomWidth:2,borderBottomColor:'gray',marginBottom:10}}>Recommended parking slot</Text>
+              <Text style={{fontSize:20}}>Recommended parking slot</Text>
               {/* Display retrieve data */}
-              <View style={{flexDirection:'row',marginHorizontal:50,alignItems:'center'}}>
-<Text style={{fontSize:20,}}>Floor</Text>
-<Text style={{fontSize:20,position:'absolute',right:0,marginRight:93}}>:</Text>
-<Text style={{fontSize:18,position:'absolute',right:0,marginRight:75}}>{this.state.floor}</Text>
+              <View style={{flexDirection:'row', justifyContent:'center',alignItems:'center'}}>
+<Text style={{fontSize:20}}>Floor:</Text>
+<Text style={{fontSize:18}}>    {this.state.floor}</Text>
               </View>
-              <View style={{flexDirection:'row', marginHorizontal:50}}>
-<Text style={{fontSize:20}}>Section</Text>
-<Text style={{fontSize:20,position:'absolute',right:0,marginRight:93}}>:</Text>
-
-<Text style={{fontSize:18,position:'absolute',right:0,marginRight:80}}>{this.state.section}</Text>
+              <View style={{flexDirection:'row', justifyContent:'center',alignItems:'center'}}>
+<Text style={{fontSize:20}}>Section:</Text>
+<Text style={{fontSize:18}}>    {this.state.section}</Text>
               </View>
-              <View style={{flexDirection:'row', marginHorizontal:50}}>
-<Text style={{fontSize:20}}>Parking Slot</Text>
-<Text style={{fontSize:20,position:'absolute',right:0,marginRight:93}}>:</Text>
-
-<Text style={{fontSize:18,position:'absolute',right:0,marginRight:27}}>{this.state.parkingslot}</Text>
+              <View style={{flexDirection:'row', justifyContent:'center',alignItems:'center'}}>
+<Text style={{fontSize:20}}>Parking Slot:</Text>
+<Text style={{fontSize:18}}>    {this.state.parkingslot}</Text>
               </View>
+              <Text style={{fontSize:20}}> {this.state.errormsg}</Text>
 
             </View>
 
@@ -326,7 +373,7 @@ const styles = StyleSheet.create({
 
   },
   picker: {
-    width: Platform.select({ ios: 200 }),
+    width: Platform.select({ ios: 300 }),
     borderWidth: Platform.select({ ios: 1 }),
     borderRadius: Platform.select({ ios: 5 }),
     borderColor: Platform.select({ ios: 'grey' }),
@@ -355,7 +402,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8EAF6',
   },
   button: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: "#87CEFA",
     borderRadius: 8,
     height: 52,
@@ -412,9 +459,6 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: "center",
     justifyContent: "center",
-    borderColor: 'black',
-    borderStyle: 'solid',
-    borderWidth: 2
 
 
   }
