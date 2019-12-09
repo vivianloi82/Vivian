@@ -27,6 +27,9 @@ import EditProfileScreen from './Profile/EditProfile';
 import SettingsScreen from './Profile/Settings';
 import NotificationScreen from './Profile/Notification';
 import RewardsScreen from './Profile/Rewards';
+//Smart Pay
+import TopUpScreen from './SmartPay/TopUp';
+
 
 const HomeStack = createStackNavigator(
   {
@@ -51,6 +54,10 @@ const HomeStack = createStackNavigator(
       navigationOptions: () => ({
         title: 'Report an Issue',
       }),  },
+      Rewards: { screen: RewardsScreen,
+        navigationOptions: () => ({
+          title: 'Rewards',
+        }),  },
   },
 
   {
@@ -148,7 +155,11 @@ const SmartPayStack = createStackNavigator(
   {
     //Defination of Navigaton from smartpay screen
     SmartPay: { screen: SmartPayScreen },
-   
+    TopUp: { screen: TopUpScreen,
+      navigationOptions: () => ({
+        title: 'Top Up',
+      
+    }), },
   },
   {
     defaultNavigationOptions: {
