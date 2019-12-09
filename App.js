@@ -58,6 +58,11 @@ const HomeStack = createStackNavigator(
         navigationOptions: () => ({
           title: 'Rewards',
         }),  },
+        TopUp: { screen: TopUpScreen,
+          navigationOptions: () => ({
+            title: 'Top Up',
+          
+        }), },
   },
 
   {
