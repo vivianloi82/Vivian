@@ -39,38 +39,7 @@ class HomeScreen extends React.Component {
 
     return (
       <View>
-        {/* Top Home
-        <View style={{ borderWidth: 2, width: 350, marginHorizontal: 30, marginTop: 40, height: 90 }}>
-          <View style={{ borderBottomWidth: 1, width: 347, marginTop: 40 }}>
-
-          </View>
-        </View>
-        <View style={{ marginTop: -80 }}>
-
-          <View style={{ flexDirection: 'row', marginLeft: 50 }}>
-            <Text style={{ fontSize: 20 }} >Balance</Text>
-            <Text style={{ position: 'absolute', right: 0, fontSize: 20, marginRight: 50 }}>RM{this.state.balance}</Text>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginHorizontal: 40 }}>
-            <TouchableOpacity style={styles.Topbutton} >
-
-              <Text style={styles.buttonText}>Pay</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Topbutton} >
-
-              <Text style={styles.buttonText}>Request </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Topbutton} onPress={() => this.props.navigation.navigate('TopUp')}>
-
-              <Text style={styles.buttonText}>Top up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.Topbutton} onPress={() => this.props.navigation.navigate('Rewards')} >
-
-              <Text style={styles.buttonText}>Rewards</Text>
-            </TouchableOpacity>
-          </View>
-
+      
         </View> */}
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 80 }}>
 
