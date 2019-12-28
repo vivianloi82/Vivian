@@ -39,8 +39,7 @@ class HomeScreen extends React.Component {
 
     return (
       <View>
-      
-        </View> */}
+  
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 80 }}>
 
 
