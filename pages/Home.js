@@ -72,14 +72,14 @@ class HomeScreen extends React.Component {
           </View>
 
         </View> */}
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 80 }}>
 
 
         </View>
         <Text style={{color:'black',justifyContent: 'center', alignSelf:"center", fontSize:40}}>Smart Car Parking</Text>
 
         {/* Bottom */}
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 150 }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 130 }}>
 
           <View
             style={{

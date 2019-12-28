@@ -198,7 +198,7 @@ const AppContainer = createBottomTabNavigator(
     
             {
               Home: { screen: HomeStack },
-              SmartPay: { screen: SmartPayStack },
+              // SmartPay: { screen: SmartPayStack },
               Profile: { screen: ProfileStack },
             },
             {
@@ -209,9 +209,10 @@ const AppContainer = createBottomTabNavigator(
                   let iconName;
                   if (routeName === 'Home') {
                     iconName = 'ios-home';
-                  } else if (routeName === 'SmartPay') {
-                    iconName = 'ios-wallet';
-                  }
+                  } 
+                  // else if (routeName === 'SmartPay') {
+                  //   iconName = 'ios-wallet';
+                  // }
                   else if(routeName === 'Profile') {
                     iconName = 'ios-person';
                   }
