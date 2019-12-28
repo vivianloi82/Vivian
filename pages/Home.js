@@ -39,7 +39,7 @@ class HomeScreen extends React.Component {
 
     return (
       <View>
-        {/* Top Home */}
+        {/* Top Home
         <View style={{ borderWidth: 2, width: 350, marginHorizontal: 30, marginTop: 40, height: 90 }}>
           <View style={{ borderBottomWidth: 1, width: 347, marginTop: 40 }}>
 
@@ -71,11 +71,15 @@ class HomeScreen extends React.Component {
             </TouchableOpacity>
           </View>
 
+        </View> */}
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 100 }}>
+
+
         </View>
+        <Text style={{color:'black',justifyContent: 'center', alignSelf:"center", fontSize:40}}>Smart Car Parking</Text>
 
         {/* Bottom */}
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 130 }}>
-
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 150 }}>
 
           <View
             style={{

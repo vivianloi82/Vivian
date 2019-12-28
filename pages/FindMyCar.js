@@ -15,27 +15,123 @@ export default class FindMyCarScreen extends Component {
       //variable to hold the qr value
       qrvalue: '',
       opneScanner: false,
+      show: false,
     };
 }
-  
-  onOpenlink() {
-    //Function to open URL, If scanned 
-    Linking.openURL(this.state.qrvalue);
-    //Linking used to open the URL in any browser that you have installed
-  }
- 
+componentDidMount() {
+  const user = this.props.uid || Fire.shared.uid;
+
+  this.unsubscribe = Fire.shared.firestore
+    .collection("users")
+    .doc(user)
+    .onSnapshot(doc => {
+      this.setState({ user: doc.data() });
+    });
+
+
+}
+componentWillMount()
+{
+    // check if the FindMyCar database is empty or not
+    const user = this.props.uid || Fire.shared.uid;
+
+    Fire.shared.firestore.collection("FindMyCar").where("uid", "==", user).get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        if (!doc.exists)
+        {  
+          this.setState({ show: false })
+        }
+        else{
+          console.log(doc.data().SlotName)
+          this.setState({ show: true })
+          this.setState({ qrvalue: doc.data().SlotName });
+        }
+      })
+    })
+    // if it is empty then all is visible with scan qrcode button
+    // else display temporary slotname to user with found button 
+}
+
+DeleteTempSlotName() //delete temporary slotname
+{
+  const user = this.props.uid || Fire.shared.uid;
+
+  Fire.shared.firestore.collection("FindMyCar").where("uid", "==", user).get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      if (doc.exists)
+      {  
+        console.log(doc.id)
+        this.setState({ show: false, qrvalue:'' })
+        var id = doc.id
+   
+           Fire.shared.firestore.collection("FindMyCar").doc(id).delete().then(() => {
+          console.log("Document successfully deleted!");
+         
+        }).catch((error) => {
+          console.error("Error removing document: ", error);
+        
+        });
+      
+       
+      }
+   
+    })
+  })
+
+
+}
+  // onOpenlink() {
+  //   //Function to open URL, If scanned 
+  //   Linking.openURL(this.state.qrvalue);
+  //   //Linking used to open the URL in any browser that you have installed
+  // }
+
   onBarcodeScan(qrvalue) {
-    //called after te successful scanning of QRCode/Barcode
-    
+    //called after the successful scanning of QRCode/Barcode
+    const user = this.props.uid || Fire.shared.uid;
+
+    Fire.shared.firestore.collection("FindMyCar").where("uid", "==", user).get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        if (doc.exists)
+        {  
+          console.log(doc.id)
+          this.setState({ show: false, qrvalue:'' })
+          var id = doc.id
+     
+             Fire.shared.firestore.collection("FindMyCar").doc(id).delete().then(() => {
+            console.log("Document successfully deleted!");
+           
+          }).catch((error) => {
+            console.error("Error removing document: ", error);
+          
+          });
+        
+         
+        }
+     
+      })
+    })
     Fire.shared.firestore.collection("ParkingSlots").where("SlotName", "==", qrvalue).get()
   .then(snapshot => {
     snapshot.forEach(doc => {
       const data = ( doc.data().SlotName);
       if (data === qrvalue)
       {
+        const user = this.props.uid || Fire.shared.uid;
+
         this.setState({ qrvalue: data });
-        this.setState({ opneScanner: false });
-      }
+        this.setState({ opneScanner: false, show: true }); 
+        //create new database "FindMyCar" to store temporary slotname to user
+        Fire.shared.firestore.collection("FindMyCar").add({
+          SlotName: qrvalue,
+          uid: user,
+          id: doc.id
+
+        })
+         }
       else 
       {      
         this.setState({ qrvalue: '' });
@@ -43,9 +139,7 @@ export default class FindMyCarScreen extends Component {
       }
     });
   })
- {/*  .catch(err => {
-    console.log('Error getting documents', err);
-  });*/}
+  
   }
   onOpneScanner() {
     var that =this;
@@ -85,18 +179,27 @@ export default class FindMyCarScreen extends Component {
       return (
         <View style={styles.container}>
             <Text style={styles.heading}>Find My Car</Text>
-            <Text style={styles.simpleText}>{this.state.qrvalue ? 'Scanned QR Code: '+this.state.qrvalue : ''}</Text>
-            {this.state.qrvalue.includes("http") ? 
+            <Text style={styles.simpleText}>{this.state.qrvalue ? 'Parking Slot: '+this.state.qrvalue : ''}</Text>
+            {/* {this.state.qrvalue ? 
               <TouchableHighlight
                 onPress={() => this.onOpenlink()}
                 style={styles.button}>
                   <Text style={{ color: '#FFFFFF', fontSize: 12 }}>Open Link</Text>
               </TouchableHighlight>
               : null
-            }
+            } */}
+ {this.state.show ? (
+           <TouchableHighlight
+           onPress={() => this.DeleteTempSlotName()}
+           style={styles.button}>
+             <Text style={{ color: '#FFFFFF', fontSize: 12 }}>Found</Text>
+         </TouchableHighlight>
+        ) : null}
+
             <TouchableHighlight
+           
               onPress={() => this.onOpneScanner()}
-              style={styles.button}>
+              style={styles.button}> 
                 <Text style={{ color: '#FFFFFF', fontSize: 12 }}>
                 Open QR Scanner
                 </Text>

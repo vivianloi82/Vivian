@@ -80,7 +80,7 @@ const HomeStack = createStackNavigator(
       },
     
       headerTintColor: 'black',
-      title: 'Smart Car Parking',
+      title: '',
     
      headerRight:
 (
